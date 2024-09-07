@@ -9,10 +9,12 @@ export const Home: FC = () => {
   const [workerResult, setWorkerResult] = useState<number | "loading" | null>(
     0,
   );
+  const [activeWorkers, setActiveWorkers] = useState(0);
   const [duration, setDuration] = useState(0);
 
   const getWorkerMessage = () => {
     const t0 = performance.now();
+    setActiveWorkers((prev) => prev + 1);
     setWorkerResult("loading");
     worker.postMessage("start");
     worker.onmessage = (event) => {
@@ -22,12 +24,14 @@ export const Home: FC = () => {
       if (event.data?.result) {
         setWorkerResult(event.data?.result);
         setDuration(performance.now() - t0);
+        setActiveWorkers((prev) => prev - 1);
       }
     };
   };
 
   return (
     <div className={styles.root}>
+      <p>Active Workers: {activeWorkers}</p>
       <h2>Worker result: {workerResult}</h2>
       {progress === 100 ? (
         <h2>Worker duration: {(duration / 1000).toFixed(2)} s</h2>
@@ -35,12 +39,17 @@ export const Home: FC = () => {
         <>Loading</>
       )}
       <div className={styles.loaderBody}>
-        <div className={styles.loader} style={{ transform: `translateX(-${100 - progress}%)`}}></div>
+        <div
+          className={styles.loader}
+          style={{ transform: `translateX(-${100 - progress}%)` }}
+        ></div>
       </div>
       <h2>{state}</h2>
       <button onClick={() => setState((prev) => ++prev)}>Increase</button>
       <button onClick={() => setState((prev) => --prev)}>Decrease</button>
-      <button onClick={() => getWorkerMessage()}>Call worker</button>
+      <button onClick={() => getWorkerMessage()} disabled={activeWorkers > 4}>
+        Call worker
+      </button>
     </div>
   );
 };

@@ -1,7 +1,7 @@
 onmessage = (event) => {
   if (event.data === "start") {
     let count = 0;
-    const TOTAL = 5000000000 * 3;
+    const TOTAL = 5000000000;
     const INCREMENT = TOTAL / 20;
 
     for (let i = 0; i < TOTAL; i++) {
