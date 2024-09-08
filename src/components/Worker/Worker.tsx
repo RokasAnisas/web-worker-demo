@@ -1,5 +1,6 @@
 import { FC, useEffect, useMemo, useRef, useState } from "react";
 import { styles } from "./Worker.css";
+import { LoadingDots } from "../LoadingDots";
 
 interface Props {
   triggerWorker?: number;
@@ -68,11 +69,11 @@ export const WorkerBox: FC<Props> = ({ triggerWorker }) => {
     () => [
       {
         title: "Result",
-        value: !isLoading ? workerResult : "...",
+        value: !isLoading ? workerResult : <LoadingDots />,
       },
       {
         title: "Time",
-        value: !isLoading ? `${durationToSeconds} s` : "...",
+        value: !isLoading ? `${durationToSeconds} s` : <LoadingDots />,
       },
     ],
     [durationToSeconds, workerResult, isLoading],
