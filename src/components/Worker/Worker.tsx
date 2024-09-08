@@ -67,10 +67,10 @@ export const WorkerBox: FC<Props> = ({ triggerWorker }) => {
 
   const resultData = useMemo(
     () => [
-      {
-        title: "Result",
-        value: !isLoading ? workerResult : <LoadingDots />,
-      },
+      // {
+      //   title: "Result",
+      //   value: !isLoading ? workerResult : <LoadingDots />,
+      // },
       {
         title: "Time",
         value: !isLoading ? `${durationToSeconds} s` : <LoadingDots />,
@@ -95,7 +95,7 @@ export const WorkerBox: FC<Props> = ({ triggerWorker }) => {
         <span className={styles.loaderText}>{progressOneDecimal}%</span>
       </div>
       <button onClick={() => getWorkerMessage()} disabled={isLoading}>
-        Call worker
+        {isLoading ? <LoadingDots /> : "Call worker" }
       </button>
     </div>
   );

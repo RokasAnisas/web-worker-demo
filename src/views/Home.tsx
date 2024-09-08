@@ -13,6 +13,9 @@ export const Home: FC = () => {
         <button onClick={() => setState((prev) => --prev)}>
           Remove worker
         </button>
+        <button onClick={() => setState(0)}>
+          Remove all workers
+        </button>
         <button onClick={() => setTrigger((prev) => ++prev)}>
           Call all workers
         </button>
