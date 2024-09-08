@@ -18,6 +18,7 @@ const workersGrid = style({
 
 const stack = style({
   display: "flex",
+  alignItems: "center",
   gap: "0.5rem",
 });
 

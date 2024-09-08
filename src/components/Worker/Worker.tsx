@@ -1,12 +1,18 @@
 import { FC, useEffect, useMemo, useRef, useState } from "react";
 import { styles } from "./Worker.css";
 
-export const WorkerBox: FC = () => {
+interface Props {
+  triggerWorker?: number;
+}
+
+export const WorkerBox: FC<Props> = ({ triggerWorker }) => {
   const worker = useRef<Worker | null>(null);
   // const worker = useMemo(
   //   () => new Worker(new URL("./webWorker.js", import.meta.url)),
   //   [],
   // );
+  const prevTriggerWorkerRef = useRef(triggerWorker);
+  const isMountedRef = useRef(false);
   const [progress, setProgress] = useState(0);
   const [workerResult, setWorkerResult] = useState<number | "loading" | null>(
     0,
@@ -23,6 +29,8 @@ export const WorkerBox: FC = () => {
     };
   }, []);
 
+  const progressOneDecimal = useMemo(() => progress.toFixed(0), [progress]);
+
   const getWorkerMessage = () => {
     if (!worker.current) return;
 
@@ -37,6 +45,19 @@ export const WorkerBox: FC = () => {
       }
     };
   };
+
+  useEffect(() => {
+    if (isMountedRef.current) {
+      if (prevTriggerWorkerRef.current !== triggerWorker) {
+        // Your effect logic here
+        getWorkerMessage();
+        console.log("triggerWorker changed:", triggerWorker);
+      }
+    } else {
+      isMountedRef.current = true;
+    }
+    prevTriggerWorkerRef.current = triggerWorker;
+  }, [triggerWorker]);
 
   const durationToSeconds = useMemo(
     () => (duration / 1000).toFixed(2),
@@ -70,6 +91,7 @@ export const WorkerBox: FC = () => {
           className={styles.loader}
           style={{ transform: `translateX(-${100 - progress}%)` }}
         ></div>
+        <span className={styles.loaderText}>{progressOneDecimal}%</span>
       </div>
       <button onClick={() => getWorkerMessage()} disabled={isLoading}>
         Call worker

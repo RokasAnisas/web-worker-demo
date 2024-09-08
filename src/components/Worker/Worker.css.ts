@@ -23,7 +23,7 @@ const resultValue = style({});
 
 const loaderBody = style({
   width: "100%",
-  backgroundColor: "#e2e2e2",
+  backgroundColor: "#d2d2d2",
   height: "20px",
   borderRadius: "10px",
   position: "relative",
@@ -36,8 +36,18 @@ const loader = style({
   position: "absolute",
   top: 0,
   left: 0,
-  backgroundColor: "blue",
+  backgroundColor: "#0056b3",
   transition: "all 0.3s ease",
+});
+
+const loaderText = style({
+  position: "absolute",
+  left: "50%",
+  transform: "translateX(-50%) translateY(-50%)",
+  fontSize: "0.75rem",
+  zIndex: 2,
+  top: "50%",
+  color: "#fff",
 });
 
 export const styles = {
@@ -45,6 +55,7 @@ export const styles = {
   resultGroup,
   loaderBody,
   loader,
+  loaderText,
   resultTitle,
   resultValue,
 };
