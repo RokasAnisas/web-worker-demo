@@ -9,13 +9,15 @@ export const Home: FC = () => {
   return (
     <div className={styles.root}>
       <div className={styles.stack}>
-        <button onClick={() => setState((prev) => ++prev)}>Add worker</button>
-        <button onClick={() => setState((prev) => --prev)}>
-          Remove worker
-        </button>
-        <button onClick={() => setState(0)}>
-          Remove all workers
-        </button>
+        <input
+          type="range"
+          min={1}
+          max={500}
+          value={state}
+          onChange={(e) => setState(+e.currentTarget.value)}
+          style={{ width: "300px" }}
+        />
+        <button onClick={() => setState(0)}>Remove all workers</button>
         <button onClick={() => setTrigger((prev) => ++prev)}>
           Call all workers
         </button>
@@ -23,7 +25,7 @@ export const Home: FC = () => {
       </div>
       <div className={styles.workersGrid}>
         {Array.from({ length: state }).map((_, index) => (
-          <WorkerBox key={index} triggerWorker={trigger}  />
+          <WorkerBox key={index} triggerWorker={trigger} />
         ))}
       </div>
     </div>
