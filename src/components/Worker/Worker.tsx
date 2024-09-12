@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useRef, useState } from "react";
+import { FC, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { styles } from "./Worker.css";
 import { LoadingDots } from "../LoadingDots";
 
@@ -19,6 +19,7 @@ export const WorkerBox: FC<Props> = ({ triggerWorker }) => {
     0,
   );
   const [duration, setDuration] = useState(0);
+  const [timeStarted, setTimeStarted] = useState<number | undefined>();
 
   const isLoading = useMemo(() => workerResult === "loading", [workerResult]);
 
@@ -37,6 +38,7 @@ export const WorkerBox: FC<Props> = ({ triggerWorker }) => {
 
     const t0 = performance.now();
     setWorkerResult("loading");
+    setTimeStarted(new Date().getTime());
     worker?.current?.postMessage("start");
     worker.current.onmessage = (event) => {
       setProgress(event.data?.progress);
@@ -73,11 +75,22 @@ export const WorkerBox: FC<Props> = ({ triggerWorker }) => {
       // },
       {
         title: "Time",
-        value: !isLoading ? `${durationToSeconds} s` : <LoadingDots />,
+        value: `${durationToSeconds} s`,
       },
     ],
-    [durationToSeconds, workerResult, isLoading],
+    [durationToSeconds],
   );
+
+  useLayoutEffect(() => {
+    if (isLoading) {
+      const interval = setInterval(() => {
+        setDuration(new Date().getTime() - timeStarted!);
+      }, 100);
+      console.log("interval started");
+
+      return () => clearInterval(interval);
+    }
+  }, [isLoading, timeStarted]);
 
   return (
     <div className={styles.root}>
@@ -95,7 +108,7 @@ export const WorkerBox: FC<Props> = ({ triggerWorker }) => {
         <span className={styles.loaderText}>{progressOneDecimal}%</span>
       </div>
       <button onClick={() => getWorkerMessage()} disabled={isLoading}>
-        {isLoading ? <LoadingDots /> : "Call worker" }
+        {isLoading ? <LoadingDots /> : "Call worker"}
       </button>
     </div>
   );
