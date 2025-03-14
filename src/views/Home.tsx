@@ -3,11 +3,17 @@ import { styles } from "./Home.css";
 import { WorkerBox } from "../components/Worker";
 
 export const Home: FC = () => {
+  const [inputValue, setInputValue] = useState<string>();
   const [state, setState] = useState(1);
   const [trigger, setTrigger] = useState(0);
 
   return (
     <div className={styles.root}>
+      <div className={styles.container}>
+        Binded input value
+        <input className={styles.input} value={inputValue} onChange={e => setInputValue(e.currentTarget.value)} />
+        <span>{inputValue}</span>
+      </div>
       <div className={styles.stack}>
         <input
           type="range"
@@ -17,6 +23,7 @@ export const Home: FC = () => {
           onChange={(e) => setState(+e.currentTarget.value)}
           style={{ width: "300px" }}
         />
+
         <button onClick={() => setState(0)}>Remove all workers</button>
         <button onClick={() => setTrigger((prev) => ++prev)}>
           Call all workers

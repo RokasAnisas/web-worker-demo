@@ -22,8 +22,26 @@ const stack = style({
   gap: "0.5rem",
 });
 
+const input = style({
+  borderRadius: "0.3rem",
+  fontSize: "1.5rem",
+  border: "1px solid #d2d2d2"
+});
+
+const container = style({
+  padding: "1rem",
+  backgroundColor: "#e2e2e2",
+  borderRadius: "0.5rem",
+  gap: "0.5rem",
+  maxWidth: "300px",
+  display: "flex",
+  flexDirection: "column"
+})
+
 export const styles = {
   root,
   stack,
-  workersGrid
+  input,
+  workersGrid,
+  container
 };
